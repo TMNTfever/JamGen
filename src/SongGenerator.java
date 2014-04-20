@@ -5,11 +5,12 @@
  * Song generates the music, plays it, and exports it.
  */
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.jfugue.*;
-
 
 public class SongGenerator {
 	Player player;
@@ -17,20 +18,22 @@ public class SongGenerator {
 	Genre genre;
 	String song;
 	String tempo;
+	String volume;
 	int key;
-
 	public SongGenerator() {
 		this.player = new Player();
 		// Default
 		this.genre = new Rock();
-		this.tempo = "T[Allegro]";
+		this.tempo = "T[Andantino] ";
 		this.key = 0;
+		this.volume = "X[Volume]=5000 ";
 	}
 
 	public void generate() {
 		this.song = this.genre.generate();
 		this.song = translate(this.song);
-		this.pattern = new Pattern(this.tempo + this.song);
+		this.pattern = new Pattern(this.volume + this.tempo + this.song);
+		System.out.println(pattern.toString());
 	}
 
 	/**
@@ -75,7 +78,7 @@ public class SongGenerator {
 		q.poll();
 		String replace7 = q.poll() + "dim";
 
-		// Inefficient way to substitute chord
+		// Inefficient way to substitute chords
 		for(int i = 0; i < s.length(); i++) {
 			s = s.replace("FIRST", replace1);
 			s = s.replace("SECOND", replace2);
@@ -93,14 +96,17 @@ public class SongGenerator {
 	 * Saves the current generated song as a .midi file.
 	 */
 	public void export() {
-		// To-do
+		try {
+			player.saveMidi(this.pattern, new File("JamGen.mid"));
+		} catch (IOException e) {
+			System.out.println("Save unsuccessful: " + e);
+		}
 	}
 
 	/**
 	 * Plays the song through the JFugue player.
 	 */
 	public void play() {
-		System.out.println(this.song);
 		player.play(this.pattern);
 	}
 
@@ -144,7 +150,7 @@ public class SongGenerator {
 			case 80: case 85: case 90:
 				this.tempo = "T[Andantino] "; break;
 			case 95: case 100:
-				this.tempo = "T[Moderato]"; break;
+				this.tempo = "T[Moderato] "; break;
 			case 110: case 115:
 				this.tempo = "T[Allegrato] "; break;
 			case 120: case 125: case 130: case 135:
@@ -157,5 +163,12 @@ public class SongGenerator {
 				this.tempo = "T[Presto] "; break;
 			case 220: this.tempo = "T[Pretissimo] "; break;
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public void setVolume(int i) {
+		this.volume = "X[Volume]=" + (i * 100) + " ";
 	}
 }

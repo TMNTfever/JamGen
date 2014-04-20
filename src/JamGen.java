@@ -46,7 +46,7 @@ public class JamGen {
 		JFrame frame = new JFrame("JamGen");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// COMPONENTS
+		// COMPONENT INITIALIZATION
 		
 		// Action buttons
 		final JButton gen = new JButton("Generate");
@@ -117,13 +117,25 @@ public class JamGen {
 
 		// Rhythm
 		final JLabel tempoLabel = new JLabel("BPM");
-		final SpinnerNumberModel model = new SpinnerNumberModel(120, 40, 220, 5);
-		final JSpinner tempo = new JSpinner(model);
+		final SpinnerNumberModel m1 = new SpinnerNumberModel(90, 40, 220, 5);
+		final JSpinner tempo = new JSpinner(m1);
 
-		model.addChangeListener(new ChangeListener() {
+		m1.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				songGen.setTempo((int)tempo.getValue());
+			}
+		});
+
+		// Volume slider
+		final JLabel volumeLabel = new JLabel("Volume");
+		final SpinnerNumberModel m2 = new SpinnerNumberModel(50, 1, 100, 1);
+		final JSpinner volume = new JSpinner(m2);
+
+		m2.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				songGen.setVolume((int)volume.getValue());
 			}
 		});
 
@@ -147,7 +159,7 @@ public class JamGen {
 		genre.add(reggae);
 		genre.add(rock);
 
-		// Add key, scale, tempo, swing, time signature
+		// Add key, scale, tempo, volume
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		details.add(keyLabel, gbc);
@@ -162,6 +174,13 @@ public class JamGen {
 		gbc.gridy = 1;
 		details.add(tempo, gbc);
 
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		details.add(volumeLabel, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		details.add(volume, gbc);
+	
 		// FRAME COMPLETE
 		frame.add(buttons, BorderLayout.NORTH);
 		frame.add(genre, BorderLayout.CENTER);
