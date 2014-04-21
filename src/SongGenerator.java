@@ -126,6 +126,7 @@ public class SongGenerator {
 			s = s.replace("fifth", sub5);
 			s = s.replace("sixth", sub6);
 			s = s.replace("seventh", sub7);
+			s = s.replace("rest", "R");
 		}
 		return s;
 	}
@@ -250,7 +251,7 @@ public class SongGenerator {
 				this.chordsInstr = "I24 ";
 				break;
 			case 1:
-				this.chordsInstr = "I0 ";
+				this.chordsInstr = "I2 ";
 				break;
 			case 2:
 				this.chordsInstr = "I18 ";

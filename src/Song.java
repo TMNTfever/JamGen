@@ -647,16 +647,13 @@ public class Song {
 			previous = current;
 		}
 
-		// Hold a leading tone
-		s += leadingTone() + " ";
-
 		// Tie 16ths until whole note
 		for(int i = count; i < length; i++) {
 			s += "s";
 		}
 
 		// Add whole note
-		s += leadingTone() + "-w ";
+		s += leadingTone() + "w ";
 
 		return s;
 	}
@@ -667,9 +664,25 @@ public class Song {
 	private int randomNote(int previous) {
 		switch(previous) {
 			case 0:
+				switch(r.nextInt(6)) {
+					case 0:
+						return 0;
+					case 1:
+						return 1;
+					case 2:
+						return 2;
+					case 3:
+						return 3;
+					case 4:
+						return 4;
+					case 5:
+						return 5;
+				}
+				return 1;
+			case 1:
 				switch(r.nextInt(5)) {
 					case 0:
-						return 1;
+						return 0;
 					case 1:
 						return 2;
 					case 2:
@@ -679,14 +692,6 @@ public class Song {
 					case 4:
 						return 5;
 				}
-				return 1;
-			case 1:
-				switch(r.nextInt(2)) {
-					case 0:
-						return 2;
-					case 1:
-						return 3;
-				}
 			case 2:
 				switch(r.nextInt(3)) {
 					case 0:
@@ -694,17 +699,19 @@ public class Song {
 					case 1:
 						return 3;
 					case 2:
-						return 5;
+						return 4;
 				}
 			case 3:
-				switch(r.nextInt(4)) {
+				switch(r.nextInt(5)) {
 					case 0:
-						return 1;
+						return 0;
 					case 1:
-						return 2;
+						return 1;
 					case 2:
-						return 4;
+						return 2;
 					case 3:
+						return 4;
+					case 4:
 						return 5;
 				}
 			case 4:
@@ -717,14 +724,16 @@ public class Song {
 						return 5;
 				}
 			case 5:
-				switch(r.nextInt(4)) {
+				switch(r.nextInt(5)) {
 					case 0:
-						return 1;
+						return 0;
 					case 1:
-						return 3;
+						return 1;
 					case 2:
-						return 4;
+						return 3;
 					case 3:
+						return 4;
+					case 4:
 						return 6;
 				}
 			case 6:
@@ -755,7 +764,7 @@ public class Song {
 			case 3:
 				return "seventh";
 		}
-		
+
 		return "";
 	}
 
@@ -764,6 +773,8 @@ public class Song {
 	 */
 	private String convert(int i) {
 		switch(i) {
+			case 0:
+				return "rest";
 			case 1:
 				return "first";
 			case 2:
