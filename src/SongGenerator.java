@@ -15,24 +15,26 @@ import org.jfugue.*;
 public class SongGenerator {
 	Player player;
 	Pattern pattern;
-	Genre genre;
-	String song;
+	Song song;
+	String songString;
 	String tempo;
-	String volume;
+	String melodyInstr;
+	String chordsInstr;
 	int key;
+
 	public SongGenerator() {
 		this.player = new Player();
-		// Default
-		this.genre = new Rock();
+		this.song = new Song();
 		this.tempo = "T[Andantino] ";
+		this.melodyInstr = "I0 ";
+		this.chordsInstr = "I24 ";
 		this.key = 0;
-		this.volume = "X[Volume]=5000 ";
 	}
 
 	public void generate() {
-		this.song = this.genre.generate();
-		this.song = translate(this.song);
-		this.pattern = new Pattern(this.volume + this.tempo + this.song);
+		this.songString = this.song.generate(this.melodyInstr, this.chordsInstr);
+		this.songString = translate(this.songString);
+		this.pattern = new Pattern(this.tempo + this.songString);
 		System.out.println(pattern.toString());
 	}
 
@@ -46,37 +48,63 @@ public class SongGenerator {
 	 * @return		Returns a JFugue formatted string.
 	 */
 	private String translate(String s) {
-		Queue<String> q = new LinkedList<String>();
-		q.add("A");
-		q.add("Bb");
-		q.add("B");
-		q.add("C");
-		q.add("Db");
-		q.add("D");
-		q.add("Eb");
-		q.add("E");
-		q.add("F");
-		q.add("Gb");
-		q.add("G");
-		q.add("Ab");
+		Queue<String> q1 = new LinkedList<String>();
+		Queue<String> q2 = new LinkedList<String>();
+		q1.add("A");
+		q1.add("Bb");
+		q1.add("B");
+		q1.add("C");
+		q1.add("Db");
+		q1.add("D");
+		q1.add("Eb");
+		q1.add("E");
+		q1.add("F");
+		q1.add("Gb");
+		q1.add("G");
+		q1.add("Ab");
+		q2.add("A");
+		q2.add("Bb");
+		q2.add("B");
+		q2.add("C");
+		q2.add("Db");
+		q2.add("D");
+		q2.add("Eb");
+		q2.add("E");
+		q2.add("F");
+		q2.add("Gb");
+		q2.add("G");
+		q2.add("Ab");
 
 		// Rotate elements of queue, such that they match up to current key
 		for(int i = 0; i < key; i++) {
-			q.add(q.poll());
+			q1.add(q1.poll());
+			q2.add(q2.poll());
 		}
 
-		String replace1 = q.poll() + "maj";
-		q.poll();
-		String replace2 = q.poll() + "min";
-		q.poll();
-		String replace3 = q.poll() + "min";
-		String replace4 = q.poll() + "maj";
-		q.poll();
-		String replace5 = q.poll() + "maj";
-		q.poll();
-		String replace6 = q.poll() + "min";
-		q.poll();
-		String replace7 = q.poll() + "dim";
+		String replace1 = q1.poll() + "maj";
+		String sub1 = q2.poll();
+		q1.poll();
+		q2.poll();
+		String replace2 = q1.poll() + "min";
+		String sub2 = q2.poll();
+		q1.poll();
+		q2.poll();
+		String replace3 = q1.poll() + "min";
+		String sub3 = q2.poll();
+		String replace4 = q1.poll() + "maj";
+		String sub4 = q2.poll();
+		q1.poll();
+		q2.poll();
+		String replace5 = q1.poll() + "maj";
+		String sub5 = q2.poll();
+		q1.poll();
+		q2.poll();
+		String replace6 = q1.poll() + "min";
+		String sub6 = q2.poll();
+		q1.poll();
+		q2.poll();
+		String replace7 = q1.poll() + "dim";
+		String sub7 = q2.poll();
 
 		// Inefficient way to substitute chords
 		for(int i = 0; i < s.length(); i++) {
@@ -89,18 +117,17 @@ public class SongGenerator {
 			s = s.replace("SEVENTH", replace7);
 		}
 
-		return s;
-	}
-
-	/**
-	 * Saves the current generated song as a .midi file.
-	 */
-	public void export() {
-		try {
-			player.saveMidi(this.pattern, new File("JamGen.mid"));
-		} catch (IOException e) {
-			System.out.println("Save unsuccessful: " + e);
+		// Inefficient way to substitute melody
+		for(int i = 0; i < s.length(); i++) {
+			s = s.replace("first", sub1);
+			s = s.replace("second", sub2);
+			s = s.replace("third", sub3);
+			s = s.replace("fourth", sub4);
+			s = s.replace("fifth", sub5);
+			s = s.replace("sixth", sub6);
+			s = s.replace("seventh", sub7);
 		}
+		return s;
 	}
 
 	/**
@@ -110,16 +137,27 @@ public class SongGenerator {
 		player.play(this.pattern);
 	}
 
-	/** 
-	 * Determines what the genre is based on GUI selection.
-	 * 
-	 * @param i	= 0: Reggae
-	 * 		 	= 1: Rock
+	/**
+	 * Saves the current generated song as a .midi file.
 	 */
-	public void setGenre(int i) {
-		switch(i) {
-			case 0: this.genre = new Reggae(); break;
-			case 1: this.genre = new Rock(); break;
+	public void export() {
+		int i = 0;
+		export(i);
+	}
+
+	private void export(int i) {
+		File f = new File("JamGen" + i + ".mid");
+
+		try {
+			if(f.exists()) {
+				export(i + 1);
+			}
+			else {
+				player.saveMidi(this.pattern, f);
+			}
+		}
+		catch (IOException e) {
+			System.out.println("Save unsuccessful: " + e);
 		}
 	}
 
@@ -152,7 +190,7 @@ public class SongGenerator {
 			case 95: case 100:
 				this.tempo = "T[Moderato] "; break;
 			case 110: case 115:
-				this.tempo = "T[Allegrato] "; break;
+				this.tempo = "T[Allegretto] "; break;
 			case 120: case 125: case 130: case 135:
 				this.tempo = "T[Allegro] "; break;
 			case 145: case 150: case 155: case 160: 
@@ -165,10 +203,61 @@ public class SongGenerator {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public void setVolume(int i) {
-		this.volume = "X[Volume]=" + (i * 100) + " ";
+	public void setMelodyInstrument(int i) {
+		switch(i) {
+			case 0:
+				this.melodyInstr = "I0 ";
+				break;
+			case 1:
+				this.melodyInstr = "I24 ";
+				break;
+			case 2:
+				this.melodyInstr = "I4 ";
+				break;
+			case 3:
+				this.melodyInstr = "I30 ";
+				break;
+			case 4:
+				this.melodyInstr = "I40 ";
+				break;
+			case 5:
+				this.melodyInstr = "I52 ";
+				break;
+			case 6:
+				this.melodyInstr = "I56 ";
+				break;
+			case 7:
+				this.melodyInstr = "I60 ";
+				break;
+			case 8:
+				this.melodyInstr = "I64 ";
+				break;
+			case 9:
+				this.melodyInstr = "I71 ";
+				break;
+			case 10:
+				this.melodyInstr = "I73 ";
+				break;
+			case 11:
+				this.melodyInstr = "I80 ";
+				break;
+		}
+	}
+	
+	public void setChordsInstrument(int i) {
+		switch(i) {
+			case 0:
+				this.chordsInstr = "I24 ";
+				break;
+			case 1:
+				this.chordsInstr = "I0 ";
+				break;
+			case 2:
+				this.chordsInstr = "I18 ";
+				break;
+			case 3:
+				this.chordsInstr = "I48 ";
+				break;
+		}
 	}
 }

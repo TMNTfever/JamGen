@@ -47,11 +47,12 @@ public class JamGen {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// COMPONENT INITIALIZATION
-		
+
 		// Action buttons
 		final JButton gen = new JButton("Generate");
-		final JButton play = new JButton("Play");
 		final JButton export = new JButton("Export");
+		final JButton play = new JButton("Play");
+		final JButton stop = new JButton("Stop");
 
 		gen.addActionListener(new ActionListener() {
 			@Override
@@ -74,31 +75,39 @@ public class JamGen {
 			}
 		});
 
-		// Genre buttons
-		final JRadioButton reggae = new JRadioButton("Reggae");
-		final JRadioButton rock = new JRadioButton("Rock");
-	    ButtonGroup genreGroup = new ButtonGroup();
-	    genreGroup.add(reggae);
-	    genreGroup.add(rock);
-
-	    reggae.addActionListener(new ActionListener() {
+		stop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(reggae.isSelected())
-					songGen.setGenre(0);
+				//songGen.stop();
 			}
 		});
-	    
-	    rock.addActionListener(new ActionListener() {
+
+		// Instruments
+		final JLabel melodyLabel = new JLabel("Melody");
+		final JLabel chordsLabel = new JLabel("Chords");
+		String []melodyVals = {"Piano", "Guitar", "Electric Piano", "Jazz Guitar",
+							   "Violin", "Choir", "Trumpet", "French Horn",
+							   "Saxophone", "Clarinet", "Flute", "Square"};
+		String []chordsVals = {"Guitar", "Piano", "Organ", "Strings"};
+		final JComboBox<String> melody = new JComboBox<String>(melodyVals);
+		final JComboBox<String> chords = new JComboBox<String>(chordsVals);
+
+		melody.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(rock.isSelected())
-					songGen.setGenre(1);
+				songGen.setMelodyInstrument(melody.getSelectedIndex());
+			}
+		});
+
+		chords.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				songGen.setChordsInstrument(chords.getSelectedIndex());
 			}
 		});
 
 	    // Key
-	    JLabel keyLabel = new JLabel("Key");
+	    final JLabel keyLabel = new JLabel("Key");
 		String []keyVals = {"A", "A# / Bb", "B", "C", "C# / Db", "D",
 				            "D# / Eb", "E", "F", "F# / Gb", "G", "G# / Ab"};
 		final JComboBox<String> key = new JComboBox<String>(keyVals);
@@ -127,24 +136,12 @@ public class JamGen {
 			}
 		});
 
-		// Volume slider
-		final JLabel volumeLabel = new JLabel("Volume");
-		final SpinnerNumberModel m2 = new SpinnerNumberModel(50, 1, 100, 1);
-		final JSpinner volume = new JSpinner(m2);
-
-		m2.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				songGen.setVolume((int)volume.getValue());
-			}
-		});
-
 		// PANELS & LAYOUT
 		JPanel buttons = new JPanel(new GridLayout(2, 2));
-		JPanel genre = new JPanel(new GridLayout(0, 3)); // Infinite rows
+		JPanel instruments = new JPanel(new GridLayout(3, 2));
 		JPanel details = new JPanel(new GridBagLayout());
 		buttons.setBorder(BorderFactory.createTitledBorder("Actions"));
-		genre.setBorder(BorderFactory.createTitledBorder("Genre"));
+		instruments.setBorder(BorderFactory.createTitledBorder("Instruments"));
 		details.setBorder(BorderFactory.createTitledBorder("Song Details"));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5, 5, 5, 5);
@@ -153,13 +150,23 @@ public class JamGen {
 		buttons.add(gen);
 		buttons.add(export);
 		buttons.add(play);
-		buttons.add(new JLabel("by: J.C. Reyes", JLabel.CENTER));
+		buttons.add(stop);
 
-		// Add genres
-		genre.add(reggae);
-		genre.add(rock);
+		// Add instruments
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		instruments.add(melodyLabel, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		instruments.add(melody, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		instruments.add(chordsLabel, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		instruments.add(chords, gbc);
 
-		// Add key, scale, tempo, volume
+		// Add key and tempo
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		details.add(keyLabel, gbc);
@@ -174,16 +181,9 @@ public class JamGen {
 		gbc.gridy = 1;
 		details.add(tempo, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		details.add(volumeLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		details.add(volume, gbc);
-	
 		// FRAME COMPLETE
 		frame.add(buttons, BorderLayout.NORTH);
-		frame.add(genre, BorderLayout.CENTER);
+		frame.add(instruments, BorderLayout.CENTER);
 		frame.add(details, BorderLayout.SOUTH);
 		frame.pack();
 		frame.setVisible(true);
