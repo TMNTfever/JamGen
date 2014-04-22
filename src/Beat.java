@@ -2,6 +2,7 @@
  * @author	Julian-Chris Reyes
  * JamGen	Beat
  * 
+ * Randomly chooses a drumming pattern as well as a fill-in.
  */
 
 import java.util.Random;
@@ -225,10 +226,10 @@ public class Beat {
 	private String fill00() {
 		String s = "";
 
-		s += "[high_tom]s* [high_tom]s* [high_tom]s* ";
-		s += "[hi_mid_tom]s* [hi_mid_tom]s* [hi_mid_tom]s* ";
-		s += "[low_mid_tom]s* [low_mid_tom]s* [low_mid_tom]s* ";
-		s += "[low_tom]s* [low_tom]s* [low_tom]s* ";
+		s += "[hi_tom]s*3:2 [hi_tom]s*3:2 [hi_tom]s*3:2 ";
+		s += "[hi_mid_tom]s*3:2 [hi_mid_tom]s*3:2 [hi_mid_tom]s*3:2 ";
+		s += "[lo_mid_tom]s*3:2 [lo_mid_tom]s*3:2 [lo_mid_tom]s*3:2 ";
+		s += "[lo_tom]s*3:2 [lo_tom]s*3:2 [lo_tom]s*3:2 ";
 
 		return s;
 	}
@@ -245,16 +246,16 @@ public class Beat {
 	}
 
 	private String fill02() {
-		return "[high_tom]q* [hi_mid_tom]q* [low_mid_tom]q* ";
+		return "[hi_tom]q*3:2 [hi_mid_tom]q*3:2 [lo_mid_tom]q*3:2 ";
 	}
 
 	private String fill03() {
 		String s = "";
 
-		s += "[high_tom]s+[crash_cymbal_1]s ";
+		s += "[hi_tom]s+[crash_cymbal_1]s ";
 		s += "[hi_mid_tom]s ";
-		s += "[low_mid_tom]s ";
-		s += "[low_tom]s+[crash_cymbal_2]s ";
+		s += "[lo_mid_tom]s ";
+		s += "[lo_tom]s+[crash_cymbal_2]s ";
 
 		return s;
 	}

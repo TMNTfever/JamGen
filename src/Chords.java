@@ -2,6 +2,7 @@
  * @author	Julian-Chris Reyes
  * JamGen	Chords
  * 
+ * Randomly chooses a strumming pattern and chord progression.
  */
 
 import java.util.Random;

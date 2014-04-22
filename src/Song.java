@@ -2,6 +2,8 @@
  * @author	Julian-Chris Reyes
  * JamGen	Song
  *
+ * Each song consists of three major tracks. This class determines the length
+ * of the song.
  */
 
 import java.util.Random;

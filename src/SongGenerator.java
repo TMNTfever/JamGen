@@ -2,7 +2,8 @@
  * @author	Julian-Chris Reyes
  * JamGen	Song
  * 
- * Song generates the music, plays it, and exports it.
+ * Utilizes JFugue's Player class to interpret the randomly generated music,
+ * and to also playback and save the song as a midi file.
  */
 
 import java.io.File;
@@ -33,6 +34,10 @@ public class SongGenerator {
 		this.key = 0;
 	}
 
+	/**
+	 * Calls methods to generate a string that represents the song and
+	 * translates that to a JFugue readable format
+	 */
 	public void generate() {
 		this.songString = this.song.generate(this.melodyInstr, this.chordsInstr);
 		this.songString = translate(this.songString);
@@ -44,8 +49,8 @@ public class SongGenerator {
 	 * Takes a generic-key song (consists of chord numbers) and translates the
 	 * string into a readable format for JFugue.
 	 * 
-	 * @param s		Generated song string in generic format, which is not in
-	 * 				a specific key.
+	 * @param s		Generated music string in generic format, which is not in
+	 * 				any specific key.
 	 * 
 	 * @return		Returns a JFugue formatted string.
 	 */
@@ -135,13 +140,6 @@ public class SongGenerator {
 	}
 
 	/**
-	 * Plays the song through the JFugue player.
-	 */
-	public void play() {
-		player.play(this.pattern);
-	}
-
-	/**
 	 * Saves the current generated song as a .midi file.
 	 */
 	public void export() {
@@ -149,6 +147,11 @@ public class SongGenerator {
 		export(i);
 	}
 
+	/**
+	 * Recursive method for export() to avoid rewriting previously saved files.
+	 * 
+	 * @param i		The number of files under the same name.
+	 */
 	private void export(int i) {
 		File f = new File("JamGen" + i + ".mid");
 
@@ -163,13 +166,26 @@ public class SongGenerator {
 		catch (IOException e) {
 			System.out.println("Save unsuccessful: " + e);
 		}
+	}
 
+	/**
+	 * Plays the song through the JFugue player.
+	 */
+	public void play() {
+		player.play(this.pattern);
+	}
+
+	/**
+	 * Stops playing the song through the JFugue player.
+	 */
+	public void stop() {
+		//player.wait();
 	}
 
 	/**
 	 * Setter function for key.
 	 * 
-	 * @param i
+	 * @param i		Key of A = 0, A# = 1, B = 2, etc.
 	 */
 	public void setKey(int i) {
 		this.key = i;
@@ -178,7 +194,7 @@ public class SongGenerator {
 	/**
 	 * Setter function for bpm.
 	 * 
-	 * @param i
+	 * @param i		Beats per minute that will be turned into a tempo string.
 	 */
 	public void setTempo(int i) {
 		switch(i) {
@@ -208,6 +224,11 @@ public class SongGenerator {
 		}
 	}
 
+	/**
+	 * Setter function for melody instrument.
+	 * 
+	 * @param i		Instrument index from GUI
+	 */
 	public void setMelodyInstrument(int i) {
 		switch(i) {
 			case 0:
@@ -250,8 +271,9 @@ public class SongGenerator {
 	}
 
 	/**
+	 * Setter function for chords instrument.
 	 * 
-	 * @param i
+	 * @param i		Instrument index from GUI.
 	 */
 	public void setChordsInstrument(int i) {
 		switch(i) {

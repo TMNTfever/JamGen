@@ -2,6 +2,7 @@
  * @author	Julian-Chris Reyes
  * JamGen	Melody
  * 
+ * Randomly generates a rhythm, and then randomly chooses tones for those notes.
  */
 
 import java.util.Random;
@@ -54,7 +55,7 @@ public class Melody {
 		}
 
 		// Remove white space to tie 16ths
-		s = s.substring(0, s.length() - 2);
+		s = s.substring(0, s.length() - 1);
 
 		// Increase length to allow for leading tone
 		length += 8;
@@ -62,15 +63,22 @@ public class Melody {
 		// Tie 16ths until whole note
 		for(int i = count; i < length; i++) {
 			s += "s";
+			count++;
 		}
 
 		// Add white space after tied sixteenths
 		s += " ";
 
-		// Add half-lengthed leading tone
-		s += leadingTone() + "w ";
+		// Add leading tone for rest of the measure
+		length += 8;
+		s += leadingTone();
 
-		return s;
+		for(int i = count; i < length; i++) {
+			s += "s";
+			count++;
+		}
+
+		return s + " ";
 	}
 
 	/**

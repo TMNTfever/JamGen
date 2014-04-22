@@ -2,9 +2,7 @@
  * @author	Julian-Chris Reyes
  * JamGen
  * 
- * Creates a basic song with the following structure: intro, verse 1, chorus,
- * verse 2, chorus, bridge, chorus, ending. Takes in account music theory to
- * generate different genres of music. All songs are in 4/4 time-signature.
+ * Creates and displays the GUI.
  */
 
 import java.awt.BorderLayout;
@@ -70,7 +68,7 @@ public class JamGen {
 		stop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//songGen.stop();
+				songGen.stop();
 			}
 		});
 
