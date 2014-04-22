@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.jfugue.*;
+import org.jfugue.midi.MidiFileManager;
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
 
 public class SongGenerator {
 	Player player;
@@ -50,30 +52,32 @@ public class SongGenerator {
 	private String translate(String s) {
 		Queue<String> q1 = new LinkedList<String>();
 		Queue<String> q2 = new LinkedList<String>();
+
 		q1.add("A");
 		q1.add("Bb");
 		q1.add("B");
 		q1.add("C");
-		q1.add("Db");
+		q1.add("C#");
 		q1.add("D");
 		q1.add("Eb");
 		q1.add("E");
 		q1.add("F");
-		q1.add("Gb");
+		q1.add("F#");
 		q1.add("G");
-		q1.add("Ab");
+		q1.add("G#");
+
 		q2.add("A");
 		q2.add("Bb");
 		q2.add("B");
 		q2.add("C");
-		q2.add("Db");
+		q2.add("C#");
 		q2.add("D");
 		q2.add("Eb");
 		q2.add("E");
 		q2.add("F");
-		q2.add("Gb");
+		q2.add("F#");
 		q2.add("G");
-		q2.add("Ab");
+		q2.add("G#");
 
 		// Rotate elements of queue, such that they match up to current key
 		for(int i = 0; i < key; i++) {
@@ -126,7 +130,6 @@ public class SongGenerator {
 			s = s.replace("fifth", sub5);
 			s = s.replace("sixth", sub6);
 			s = s.replace("seventh", sub7);
-			s = s.replace("rest", "R");
 		}
 		return s;
 	}
@@ -154,12 +157,13 @@ public class SongGenerator {
 				export(i + 1);
 			}
 			else {
-				player.saveMidi(this.pattern, f);
+				MidiFileManager.savePatternToMidi(this.pattern, f);
 			}
 		}
 		catch (IOException e) {
 			System.out.println("Save unsuccessful: " + e);
 		}
+
 	}
 
 	/**
@@ -244,7 +248,11 @@ public class SongGenerator {
 				break;
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param i
+	 */
 	public void setChordsInstrument(int i) {
 		switch(i) {
 			case 0:

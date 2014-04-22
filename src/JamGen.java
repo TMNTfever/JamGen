@@ -8,10 +8,7 @@
  */
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,21 +26,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class JamGen {
-	SongGenerator songGen; // Song to be generated, played, and exported
+	public static void main(String []args) {
+		// Song to be generated, played, and exported
+		final SongGenerator songGen = new SongGenerator();
 
-	/**
-	 * Empty constructor instantiates the song.
-	 */
-	public JamGen() {
-		this.songGen = new SongGenerator();
-	}
-
-	/**
-	 * Creates the JamGen GUI.
-	 */
-	public void createGUI() {
 		// FRAME
 		JFrame frame = new JFrame("JamGen");
+		frame.setVisible(true);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// COMPONENT INITIALIZATION
@@ -53,11 +43,13 @@ public class JamGen {
 		final JButton export = new JButton("Export");
 		final JButton play = new JButton("Play");
 		final JButton stop = new JButton("Stop");
+		play.setEnabled(false);
 
 		gen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				songGen.generate();
+				play.setEnabled(true);
 			}
 		});
 
@@ -138,13 +130,11 @@ public class JamGen {
 
 		// PANELS & LAYOUT
 		JPanel buttons = new JPanel(new GridLayout(2, 2));
-		JPanel instruments = new JPanel(new GridLayout(3, 2));
-		JPanel details = new JPanel(new GridBagLayout());
+		JPanel instruments = new JPanel(new GridLayout(2, 2));
+		JPanel details = new JPanel(new GridLayout(2, 2));
 		buttons.setBorder(BorderFactory.createTitledBorder("Actions"));
 		instruments.setBorder(BorderFactory.createTitledBorder("Instruments"));
 		details.setBorder(BorderFactory.createTitledBorder("Song Details"));
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
 
 		// Add buttons
 		buttons.add(gen);
@@ -153,48 +143,21 @@ public class JamGen {
 		buttons.add(stop);
 
 		// Add instruments
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		instruments.add(melodyLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		instruments.add(melody, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		instruments.add(chordsLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		instruments.add(chords, gbc);
+		instruments.add(melodyLabel);
+		instruments.add(melody);
+		instruments.add(chordsLabel);
+		instruments.add(chords);
 
 		// Add key and tempo
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		details.add(keyLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		details.add(key, gbc);
+		details.add(keyLabel);
+		details.add(key);
+		details.add(tempoLabel);
+		details.add(tempo);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		details.add(tempoLabel, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		details.add(tempo, gbc);
-
-		// FRAME COMPLETE
+		// Display GUI
 		frame.add(buttons, BorderLayout.NORTH);
 		frame.add(instruments, BorderLayout.CENTER);
 		frame.add(details, BorderLayout.SOUTH);
 		frame.pack();
-		frame.setVisible(true);
-	}
-
-	/**
-	 * Runs the program
-	 * @param args
-	 */
-	public static void main(String []args) {
-		JamGen jg = new JamGen();
-		jg.createGUI();
 	}
 }
