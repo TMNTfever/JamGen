@@ -11,12 +11,17 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+
 import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
+import org.jfugue.player.ManagedPlayer;
 
 public class SongGenerator {
-	Player player;
+	ManagedPlayer player;
 	Pattern pattern;
 	Song song;
 	String songString;
@@ -26,14 +31,14 @@ public class SongGenerator {
 	int key;
 
 	public SongGenerator() {
-		this.player = new Player();
+		this.player = new ManagedPlayer();
 		this.song = new Song();
 		this.tempo = "T[Andantino] ";
 		this.melodyInstr = "I0 ";
-		this.chordsInstr = "I24 ";
+		this.chordsInstr = "I0 ";
 		this.key = 0;
 	}
-
+	
 	/**
 	 * Calls methods to generate a string that represents the song and
 	 * translates that to a JFugue readable format
@@ -143,8 +148,16 @@ public class SongGenerator {
 	 * Saves the current generated song as a .midi file.
 	 */
 	public void export() {
-		int i = 0;
-		export(i);
+		export("JamGen", 0);
+	}
+
+	/**
+	 * Creates temporary .midi files for playback.
+	 * 
+	 * @return		The name of the temp file created.
+	 */
+	public String createTemp() {
+		return export("temp/t", 0);
 	}
 
 	/**
@@ -152,34 +165,48 @@ public class SongGenerator {
 	 * 
 	 * @param i		The number of files under the same name.
 	 */
-	private void export(int i) {
-		File f = new File("JamGen" + i + ".mid");
+	private String export(String name, int i) {
+		File f = new File(name + i + ".mid");
 
 		try {
 			if(f.exists()) {
-				export(i + 1);
+				return export(name, i + 1);
 			}
 			else {
 				MidiFileManager.savePatternToMidi(this.pattern, f);
+				return f.getAbsolutePath();
 			}
 		}
 		catch (IOException e) {
 			System.out.println("Save unsuccessful: " + e);
 		}
+
+		return "";
 	}
 
 	/**
 	 * Plays the song through the JFugue player.
+	 * @throws MidiUnavailableException 
+	 * @throws InvalidMidiDataException 
 	 */
-	public void play() {
-		player.play(this.pattern);
+	public void play() throws InvalidMidiDataException, MidiUnavailableException {
+		String name = createTemp();
+		final File f = new File(name);
+		Sequence s;
+
+		try {
+			s = MidiSystem.getSequence(f);
+			this.player.start(s);
+		} catch (IOException e) {
+			System.out.println("Failed playback: " + e);
+		}
 	}
 
 	/**
 	 * Stops playing the song through the JFugue player.
 	 */
 	public void stop() {
-		//player.wait();
+		player.pause();
 	}
 
 	/**
@@ -230,44 +257,7 @@ public class SongGenerator {
 	 * @param i		Instrument index from GUI
 	 */
 	public void setMelodyInstrument(int i) {
-		switch(i) {
-			case 0:
-				this.melodyInstr = "I0 ";
-				break;
-			case 1:
-				this.melodyInstr = "I24 ";
-				break;
-			case 2:
-				this.melodyInstr = "I4 ";
-				break;
-			case 3:
-				this.melodyInstr = "I30 ";
-				break;
-			case 4:
-				this.melodyInstr = "I40 ";
-				break;
-			case 5:
-				this.melodyInstr = "I52 ";
-				break;
-			case 6:
-				this.melodyInstr = "I56 ";
-				break;
-			case 7:
-				this.melodyInstr = "I60 ";
-				break;
-			case 8:
-				this.melodyInstr = "I64 ";
-				break;
-			case 9:
-				this.melodyInstr = "I71 ";
-				break;
-			case 10:
-				this.melodyInstr = "I73 ";
-				break;
-			case 11:
-				this.melodyInstr = "I80 ";
-				break;
-		}
+		this.melodyInstr = "I" + i + " ";
 	}
 
 	/**
@@ -276,19 +266,6 @@ public class SongGenerator {
 	 * @param i		Instrument index from GUI.
 	 */
 	public void setChordsInstrument(int i) {
-		switch(i) {
-			case 0:
-				this.chordsInstr = "I24 ";
-				break;
-			case 1:
-				this.chordsInstr = "I2 ";
-				break;
-			case 2:
-				this.chordsInstr = "I18 ";
-				break;
-			case 3:
-				this.chordsInstr = "I48 ";
-				break;
-		}
+		this.chordsInstr = "I" + i + " ";
 	}
 }

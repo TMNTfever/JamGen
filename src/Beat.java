@@ -22,7 +22,7 @@ public class Beat {
 		String ending = randomBeat(endingLength);
 
 		return intro + verse + chorus + verse + chorus +
-			   bridge + chorus + ending + "[crash_cymbal_1]w ";
+			   bridge + chorus + ending + "[ride_cymbal_1]w ";
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class Beat {
 				s += fill03();
 				break;
 			case 4:
-				s += fill00();//s += fill04();
+				s += fill04();
 				break;
 		}
 
@@ -73,8 +73,7 @@ public class Beat {
 
 	private String drum00(int length) {
 		String s = "";
-		// Remove one measure to have space for fill
-		length -= 1;
+		length --;
 
 		for(int i = 0; i < length; i++) {
 			s += "[closed_hi_hat]i+[bass_drum]i ";
@@ -105,8 +104,7 @@ public class Beat {
 
 	private String drum01(int length) {
 		String s = "";
-		// Remove one measure to have space for fill
-		length -= 1;
+		length --;
 
 		for(int i = 0; i < length; i++) {
 			s += "[closed_hi_hat]i+[bass_drum]i ";
@@ -123,13 +121,13 @@ public class Beat {
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[open_hi_hat]i+[bass_drum]i ";
+		s += "[closed_hi_hat]i+[bass_drum]i ";
 		s += "[open_hi_hat]i ";
 
-		s += "[open_hi_hat]i+[acoustic_snare]i ";
+		s += "[closed_hi_hat]i+[acoustic_snare]i ";
 		s += "[open_hi_hat]i ";
 
-		s += "[open_hi_hat]i+[bass_drum]i ";
+		s += "[closed_hi_hat]i+[bass_drum]i ";
 		s += "[open_hi_hat]i ";
 
 		return s;
@@ -137,8 +135,7 @@ public class Beat {
 
 	private String drum02(int length) {
 		String s = "";
-		// Remove one measure to have space for fill
-		length -= 1;
+		length --;
 
 		for(int i = 0; i < length; i++) {
 			s += "[bass_drum]i ";
@@ -173,8 +170,7 @@ public class Beat {
 
 	private String drum03(int length) {
 		String s = "";
-		// Remove one measure to have space for fill
-		length -= 1;
+		length --;
 
 		for(int i = 0; i < length; i++) {
 			s += "[bass_drum]q ";
@@ -193,8 +189,7 @@ public class Beat {
 
 	private String drum04(int length) {
 		String s = "";
-		// Remove one measure to have space for fill
-		length -= 1;
+		length --;
 
 		for(int i = 0; i < length; i++) {
 			s += "[closed_hi_hat]s+[bass_drum]s ";
@@ -219,6 +214,20 @@ public class Beat {
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
+		s += "[closed_hi_hat]s+[bass_drum]s ";
+		s += "[closed_hi_hat]s ";
+		s += "[closed_hi_hat]s ";
+		s += "[closed_hi_hat]s ";
+
+		s += "[closed_hi_hat]s+[acoustic_snare]s ";
+		s += "[closed_hi_hat]s ";
+		s += "[closed_hi_hat]s ";
+		s += "[closed_hi_hat]s+[acoustic_snare]s ";
+
+		s += "[closed_hi_hat]s ";
+		s += "[closed_hi_hat]s+[acoustic_snare]s ";
+		s += "[closed_hi_hat]s ";
+		s += "[open_hi_hat]s+[bass_drum]s ";
 
 		return s;
 	}
@@ -226,10 +235,10 @@ public class Beat {
 	private String fill00() {
 		String s = "";
 
-		s += "[hi_tom]s*3:2 [hi_tom]s*3:2 [hi_tom]s*3:2 ";
-		s += "[hi_mid_tom]s*3:2 [hi_mid_tom]s*3:2 [hi_mid_tom]s*3:2 ";
-		s += "[lo_mid_tom]s*3:2 [lo_mid_tom]s*3:2 [lo_mid_tom]s*3:2 ";
-		s += "[lo_tom]s*3:2 [lo_tom]s*3:2 [lo_tom]s*3:2 ";
+		s += "[hi_tom]t*3:2 [hi_tom]t*3:2 [hi_tom]t*3:2 ";
+		s += "[hi_mid_tom]t*3:2 [hi_mid_tom]t*3:2 [hi_mid_tom]t*3:2 ";
+		s += "[lo_mid_tom]t*3:2 [lo_mid_tom]t*3:2 [lo_mid_tom]t*3:2 ";
+		s += "[lo_tom]t*3:2 [lo_tom]t*3:2 [lo_tom]t*3:2 ";
 
 		return s;
 	}
@@ -246,7 +255,7 @@ public class Beat {
 	}
 
 	private String fill02() {
-		return "[hi_tom]q*3:2 [hi_mid_tom]q*3:2 [lo_mid_tom]q*3:2 ";
+		return "[hi_tom]i*3:2 [hi_mid_tom]i*3:2 [lo_mid_tom]i*3:2 ";
 	}
 
 	private String fill03() {
@@ -256,6 +265,17 @@ public class Beat {
 		s += "[hi_mid_tom]s ";
 		s += "[lo_mid_tom]s ";
 		s += "[lo_tom]s+[crash_cymbal_2]s ";
+
+		return s;
+	}
+
+	private String fill04() {
+		String s = "";
+
+		s += "[hi_tom]s ";
+		s += "[hi_tom]s ";
+		s += "[hi_mid_tom]s ";
+		s += "[hi_mid_tom]s ";
 
 		return s;
 	}

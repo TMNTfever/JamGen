@@ -35,7 +35,7 @@ public class Chords {
 		String cp = "";
 
 		// Determine chord progression
-		switch(r.nextInt(7)) {
+		switch(r.nextInt(9)) {
 			case 0:
 				chords = new String[]{"FIRST", "FIFTH", "SIXTH", "FOURTH"};
 				break;
@@ -67,7 +67,7 @@ public class Chords {
 
 		// Determine and write chords with strumming pattern
 		// Note: chords change every half a measure
-		switch(r.nextInt(9)) {
+		switch(r.nextInt(11)) {
 			case 0:
 				cp = strum00(chords, length);
 				break;
@@ -94,6 +94,12 @@ public class Chords {
 				break;
 			case 8:
 				cp = strum08(chords, length);
+				break;
+			case 9:
+				cp = strum09(chords, length);
+				break;
+			case 10:
+				cp = strum10(chords, length);
 				break;
 		}
 
@@ -226,13 +232,15 @@ public class Chords {
 		String s = "";
 		// Counts number of sixteenths added so far
 		int count = 0;
-		// Length doubled since each chord only lasts half a measure
-		length *= 2;
 
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
 			for(int i = 0; i < c.length; i++) {
+				s += (c[i] + "i ");
+				s += (c[i] + "i ");
+				s += (c[i] + "i ");
+				s += (c[i] + "i ");
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
@@ -285,6 +293,56 @@ public class Chords {
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
 				s += ("Ri ");
+				count++;
+			}
+		}
+		
+		return s;
+	}
+
+	private String strum09(String []c, int length) {
+		String s = "";
+		// Counts number of sixteenths added so far
+		int count = 0;
+		// Length doubled since each chord only lasts half a measure
+		length *= 2;
+
+		// Loop for all measures
+		while(count < length) {
+			// Loop for each chord
+			for(int i = 0; i < c.length; i++) {
+				s += ("Ri ");
+				s += (c[i] + "s ");
+				s += (c[i] + "s ");
+				s += ("Ri ");
+				s += (c[i] + "i ");
+				count++;
+			}
+		}
+		
+		return s;
+	}
+
+	private String strum10(String []c, int length) {
+		String s = "";
+		// Counts number of sixteenths added so far
+		int count = 0;
+
+		// Loop for all measures
+		while(count < length) {
+			// Loop for each chord
+			for(int i = 0; i < c.length; i++) {
+				s += ("Ri ");
+				s += (c[i] + "s ");
+				s += (c[i] + "s ");
+				s += ("Ri ");
+				s += (c[i] + "i ");
+
+				s += ("Ri ");
+				s += (c[i] + "s ");
+				s += (c[i] + "s ");
+				s += ("Ri ");
+				s += (c[i] + "i ");
 				count++;
 			}
 		}

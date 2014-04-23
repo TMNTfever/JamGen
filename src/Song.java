@@ -29,11 +29,6 @@ public class Song {
 		this.melody = new Melody();
 		this.chords = new Chords();
 		this.beat = new Beat();
-		this.introLength = (r.nextInt(2) * 4) + 4;
-		this.verseLength = (r.nextInt(2) * 4) + 4;
-		this.chorusLength = (r.nextInt(2) * 4) + 4;
-		this.bridgeLength = (r.nextInt(2) * 4) + 4;
-		this.endingLength = (r.nextInt(2) * 4) + 4;
 	}
 
 	/**
@@ -42,6 +37,19 @@ public class Song {
 	 * @return
 	 */
 	String generate(String melodyInstr, String chordsInstr) {
+		this.introLength = (r.nextInt(2) * 4) + 4;
+		this.verseLength = (r.nextInt(2) * 4) + 4;
+		this.chorusLength = (r.nextInt(2) * 4) + 4;
+		this.bridgeLength = (r.nextInt(2) * 4) + 4;
+		this.endingLength = (r.nextInt(2) * 4) + 4;
+System.out.println("intro: " + introLength);
+System.out.println("verse1: " + verseLength);
+System.out.println("chorus1: " + chorusLength);
+System.out.println("verse2: " + verseLength);
+System.out.println("chorus2: " + chorusLength);
+System.out.println("bridge: " + bridgeLength);
+System.out.println("chorus3: " + chorusLength);
+System.out.println("ending: " + endingLength);
 		return "V9 " + beat.generate(this.introLength,
 									 this.verseLength,
 									 this.chorusLength,
