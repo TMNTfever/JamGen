@@ -26,8 +26,9 @@ public class Chords {
 	}
 
 	/**
+	 * Chooses a random chord progression.
 	 * 
-	 * @return
+	 * @param length		The number of measures in a chord progression.
 	 */
 	private String randomChords(int length) {
 		String []chords = {};
@@ -116,7 +117,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += ("Ri ");
 				s += (c[i] + "i ");
 				s += ("Ri ");
@@ -136,7 +137,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += ("Ri ");
 				s += (c[i] + "i ");
 				s += ("Ri ");
@@ -162,7 +163,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "h ");
 				count++;
 			}
@@ -179,7 +180,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "w ");
 				count++;
 			}
@@ -198,7 +199,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "q ");
 				s += (c[i] + "q ");
 				count++;
@@ -216,7 +217,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "q ");
 				s += (c[i] + "q ");
 				s += (c[i] + "q ");
@@ -236,7 +237,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
@@ -260,7 +261,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
 				s += (c[i] + "i ");
@@ -284,7 +285,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += (c[i] + "i ");
 				s += ("Ri ");
 				s += (c[i] + "i ");
@@ -310,7 +311,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += ("Ri ");
 				s += (c[i] + "s ");
 				s += (c[i] + "s ");
@@ -331,7 +332,7 @@ public class Chords {
 		// Loop for all measures
 		while(count < length) {
 			// Loop for each chord
-			for(int i = 0; i < c.length; i++) {
+			for(int i = 0; i < c.length && count < length; i++) {
 				s += ("Ri ");
 				s += (c[i] + "s ");
 				s += (c[i] + "s ");

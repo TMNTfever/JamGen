@@ -25,8 +25,13 @@ public class Song {
 	int bridgeLength;
 	int endingLength;
 
-	public Song() {
-		this.melody = new Melody();
+	/**
+	 * Constructor calls to create the melody, chords and beat.
+	 * 
+	 * @param key		Key C = 0, and each increment is a half step.
+	 */
+	public Song(int key) {
+		this.melody = new Melody(key);
 		this.chords = new Chords();
 		this.beat = new Beat();
 	}
@@ -36,12 +41,15 @@ public class Song {
 	 *
 	 * @return
 	 */
-	String generate(String melodyInstr, String chordsInstr) {
-		this.introLength = (r.nextInt(2) * 4) + 4;
-		this.verseLength = (r.nextInt(2) * 4) + 4;
-		this.chorusLength = (r.nextInt(2) * 4) + 4;
-		this.bridgeLength = (r.nextInt(2) * 4) + 4;
-		this.endingLength = (r.nextInt(2) * 4) + 4;
+	String generate(String melodyInstr, String chordsInstr, int percusInstr, int key,
+					boolean melodyEnable, boolean chordsEnable, boolean percusEnable) {
+		this.introLength = (r.nextInt(5) * 2) + 4;
+		this.verseLength = (r.nextInt(5) * 2) + 4;
+		this.chorusLength = (r.nextInt(5) * 2) + 4;
+		this.bridgeLength = (r.nextInt(5) * 2) + 4;
+		this.endingLength = (r.nextInt(5) * 2) + 4;
+
+// Testing purposes
 System.out.println("intro: " + introLength);
 System.out.println("verse1: " + verseLength);
 System.out.println("chorus1: " + chorusLength);
@@ -50,21 +58,28 @@ System.out.println("chorus2: " + chorusLength);
 System.out.println("bridge: " + bridgeLength);
 System.out.println("chorus3: " + chorusLength);
 System.out.println("ending: " + endingLength);
-		return "V9 " + beat.generate(this.introLength,
-									 this.verseLength,
-									 this.chorusLength,
-									 this.bridgeLength,
-									 this.endingLength) +
-			   "V0 " + chordsInstr + chords.generate(this.introLength,
-							 this.verseLength,
-							 this.chorusLength,
-							 this.bridgeLength,
-							 this.endingLength) +
-			   "V1 " + melodyInstr + melody.generate(this.introLength,
-					   								 this.verseLength,
-					   								 this.chorusLength,
-					   								 this.bridgeLength,
-					   								 this.endingLength);
-	}
 
+		return (percusEnable ? ("V9 " + 
+				beat.generate(this.introLength,
+							  this.verseLength,
+							  this.chorusLength,
+							  this.bridgeLength,
+							  this.endingLength,
+							  percusInstr)) : "") +
+			   (chordsEnable ? ("V0 " +
+				chordsInstr +
+				chords.generate(this.introLength,
+								this.verseLength,
+								this.chorusLength,
+								this.bridgeLength,
+								this.endingLength)) : "") +
+			   (melodyEnable ? ("V1 " +
+				melodyInstr +
+				melody.generate(this.introLength,
+	   							this.verseLength,
+	   							this.chorusLength,
+	   							this.bridgeLength,
+	   							this.endingLength,
+	   							key)) : "");
+	}
 }

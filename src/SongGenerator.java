@@ -28,26 +28,41 @@ public class SongGenerator {
 	String tempo;
 	String melodyInstr;
 	String chordsInstr;
+	String abPath;
 	int key;
+	int percusInstr;
+	boolean melodyEnable, chordsEnable, percusEnable;
 
+	/**
+	 * Default constructor. Tempo is 90 BPM. Meldoy and chord instruments are
+	 * pianos. Percussion instruments are rock. The key is C. All tracks are
+	 * enabled by default.
+	 */
 	public SongGenerator() {
 		this.player = new ManagedPlayer();
-		this.song = new Song();
+		this.song = new Song(key);
 		this.tempo = "T[Andantino] ";
 		this.melodyInstr = "I0 ";
 		this.chordsInstr = "I0 ";
 		this.key = 0;
+		this.abPath = "";
+		this.percusInstr = 0;
+		this.melodyEnable = true;
+		this.chordsEnable = true;
+		this.percusEnable = true;
 	}
-	
+
 	/**
 	 * Calls methods to generate a string that represents the song and
 	 * translates that to a JFugue readable format
 	 */
 	public void generate() {
-		this.songString = this.song.generate(this.melodyInstr, this.chordsInstr);
+		this.songString = this.song.generate(this.melodyInstr, this.chordsInstr, this.percusInstr, this.key, this.melodyEnable, this.chordsEnable, this.percusEnable);
 		this.songString = translate(this.songString);
 		this.pattern = new Pattern(this.tempo + this.songString);
-		System.out.println(pattern.toString());
+
+// Testing purposes
+System.out.println(pattern.toString());
 	}
 
 	/**
@@ -63,9 +78,7 @@ public class SongGenerator {
 		Queue<String> q1 = new LinkedList<String>();
 		Queue<String> q2 = new LinkedList<String>();
 
-		q1.add("A");
-		q1.add("Bb");
-		q1.add("B");
+		
 		q1.add("C");
 		q1.add("C#");
 		q1.add("D");
@@ -75,19 +88,9 @@ public class SongGenerator {
 		q1.add("F#");
 		q1.add("G");
 		q1.add("G#");
-
-		q2.add("A");
-		q2.add("Bb");
-		q2.add("B");
-		q2.add("C");
-		q2.add("C#");
-		q2.add("D");
-		q2.add("Eb");
-		q2.add("E");
-		q2.add("F");
-		q2.add("F#");
-		q2.add("G");
-		q2.add("G#");
+		q1.add("A");
+		q1.add("Bb");
+		q1.add("B");
 
 		// Rotate elements of queue, such that they match up to current key
 		for(int i = 0; i < key; i++) {
@@ -96,29 +99,17 @@ public class SongGenerator {
 		}
 
 		String replace1 = q1.poll() + "maj";
-		String sub1 = q2.poll();
 		q1.poll();
-		q2.poll();
 		String replace2 = q1.poll() + "min";
-		String sub2 = q2.poll();
 		q1.poll();
-		q2.poll();
 		String replace3 = q1.poll() + "min";
-		String sub3 = q2.poll();
 		String replace4 = q1.poll() + "maj";
-		String sub4 = q2.poll();
 		q1.poll();
-		q2.poll();
 		String replace5 = q1.poll() + "maj";
-		String sub5 = q2.poll();
 		q1.poll();
-		q2.poll();
 		String replace6 = q1.poll() + "min";
-		String sub6 = q2.poll();
 		q1.poll();
-		q2.poll();
 		String replace7 = q1.poll() + "dim";
-		String sub7 = q2.poll();
 
 		// Inefficient way to substitute chords
 		for(int i = 0; i < s.length(); i++) {
@@ -131,33 +122,7 @@ public class SongGenerator {
 			s = s.replace("SEVENTH", replace7);
 		}
 
-		// Inefficient way to substitute melody
-		for(int i = 0; i < s.length(); i++) {
-			s = s.replace("first", sub1);
-			s = s.replace("second", sub2);
-			s = s.replace("third", sub3);
-			s = s.replace("fourth", sub4);
-			s = s.replace("fifth", sub5);
-			s = s.replace("sixth", sub6);
-			s = s.replace("seventh", sub7);
-		}
 		return s;
-	}
-
-	/**
-	 * Saves the current generated song as a .midi file.
-	 */
-	public void export() {
-		export("JamGen", 0);
-	}
-
-	/**
-	 * Creates temporary .midi files for playback.
-	 * 
-	 * @return		The name of the temp file created.
-	 */
-	public String createTemp() {
-		return export("temp/t", 0);
 	}
 
 	/**
@@ -180,12 +145,31 @@ public class SongGenerator {
 		catch (IOException e) {
 			System.out.println("Save unsuccessful: " + e);
 		}
-
+	
 		return "";
 	}
 
 	/**
+	 * Saves the current generated song as a .midi file.
+	 */
+	public void export() {
+		export("jam", 0);
+	}
+
+	/**
+	 * Creates temporary .midi files for playback.
+	 * 
+	 * @return		The name of the temp file created.
+	 */
+	public String createTemp() {
+		String s = export("tempjam", 0);
+		setAbPath(s);
+		return s;
+	}
+
+	/**
 	 * Plays the song through the JFugue player.
+	 * 
 	 * @throws MidiUnavailableException 
 	 * @throws InvalidMidiDataException 
 	 */
@@ -267,5 +251,50 @@ public class SongGenerator {
 	 */
 	public void setChordsInstrument(int i) {
 		this.chordsInstr = "I" + i + " ";
+	}
+
+	/**
+	 * Setter function for percussion instruments
+	 * 
+	 * @param i		Instrumentation flavor index from GUI
+	 */
+	public void setPercusInstruments(int i) {
+		this.percusInstr = i;
+	}
+
+	/**
+	 * Setter function for abPath, which is the location of saved/temp files.
+	 */
+	public void setAbPath(String s) {
+		int i = s.indexOf("tempjam");
+		this.abPath = s.substring(0, i);
+	}
+
+	/**
+	 * Getter function for abPath.
+	 */
+	public String getAbPath() {
+		return this.abPath;
+	}
+
+	/**
+	 * Boolean trigger on whether or not to generate a melody.
+	 */
+	public void setMelodyToggle() {
+		this.melodyEnable = !this.melodyEnable;
+	}
+
+	/**
+	 * Boolean trigger on whether or not to generate a chord progression.
+	 */
+	public void setChordsToggle() {
+		this.chordsEnable = !this.chordsEnable;
+	}
+
+	/**
+	 * Boolean trigger on whether or not to generate percussion.
+	 */
+	public void setPercusEnable() {
+		this.percusEnable = !this.percusEnable;
 	}
 }

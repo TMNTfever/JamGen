@@ -9,12 +9,22 @@ import java.util.Random;
 
 public class Beat {
 	final Random r = new Random();
+	String bass;
+	String snare;
+	String openHiHat;
+	String closedHiHat;
+	String hiTom;
+	String hiMidTom;
+	String loMidTom;
+	String loTom;
+	String cymbal;
 
 	/**
 	 * Generates a string representation of the song's rhythm track.
 	 */
 	public String generate(int introLength, int verseLength, int chorusLength,
-			   			   int bridgeLength, int endingLength) {
+			   			   int bridgeLength, int endingLength, int percusInstr) {
+		setInstruments(percusInstr);
 		String intro = randomBeat(introLength);
 		String verse = randomBeat(verseLength);
 		String chorus = randomBeat(chorusLength);
@@ -22,12 +32,67 @@ public class Beat {
 		String ending = randomBeat(endingLength);
 
 		return intro + verse + chorus + verse + chorus +
-			   bridge + chorus + ending + "[ride_cymbal_1]w ";
+			   bridge + chorus + ending + this.cymbal + "w ";
 	}
 
 	/**
+	 * Sets the instruments for chosen style. 
 	 * 
-	 * @return
+	 * @param percusInstr
+	 */
+	public void setInstruments(int percusInstr) {
+		switch(percusInstr) {
+			case 0: // Rock
+				this.bass = "[acoustic_bass_drum]";
+				this.snare = "[acoustic_snare]";
+				this.openHiHat = "[open_hi_hat]";
+				this.closedHiHat = "[closed_hi_hat]";
+				this.hiTom = "[hi_tom]";
+				this.hiMidTom = "[hi_mid_tom]";
+				this.loMidTom = "[lo_mid_tom]";
+				this.loTom = "[lo_tom]";
+				this.cymbal = "[crash_cymbal_2]";
+				break;
+			case 1: // Hip-Hop
+				this.bass = "[bass_drum]";
+				this.snare = "[electric_snare]";
+				this.openHiHat = "[open_hi_hat]";
+				this.closedHiHat = "[closed_hi_hat]";
+				this.hiTom = "[lo_mid_tom]";
+				this.hiMidTom = "[lo_tom]";
+				this.loMidTom = "[hi_floor_tom]";
+				this.loTom = "[lo_floor_tom]";
+				this.cymbal = "[ride_cymbal_1]";
+				break;
+			case 2: // Electric
+				this.bass = "[open_cuica]";
+				this.snare = "[vibraslap]";
+				this.openHiHat = "[hi_wood_block]";
+				this.closedHiHat = "[lo_wood_block]";
+				this.hiTom = "[electric_snare]";
+				this.hiMidTom = "[electric_snare]";
+				this.loMidTom = "[electric_snare]";
+				this.loTom = "electric_snare[]";
+				this.cymbal = "[long_whistle]";
+				break;
+			case 3: // Ethnics
+				this.bass = "[open_cuica]";
+				this.snare = "[claves]";
+				this.openHiHat = "[maracas]";
+				this.closedHiHat = "[cabasa]";
+				this.hiTom = "[hi_timbale]";
+				this.hiMidTom = "[lo_timbale]";
+				this.loMidTom = "[hi_bongo]";
+				this.loTom = "[lo_bongo]";
+				this.cymbal = "[ride_bell]";
+				break;
+		}
+	}
+
+	/**
+	 * Chooses a random beat.
+	 * 
+	 * @param length	The number of measures to loop for.
 	 */
 	private String randomBeat(int length) {
 		String s = "";
@@ -76,28 +141,28 @@ public class Beat {
 		length --;
 
 		for(int i = 0; i < length; i++) {
-			s += "[closed_hi_hat]i+[bass_drum]i ";
-			s += "[closed_hi_hat]i+[bass_drum]i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
 
-			s += "[closed_hi_hat]i+[acoustic_snare]i ";
-			s += "[closed_hi_hat]i+[bass_drum]i ";
+			s += this.closedHiHat + "i+" + this.snare + "i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
 
-			s += "[closed_hi_hat]i+[bass_drum]i ";
-			s += "[closed_hi_hat]i+[bass_drum]i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
 
-			s += "[closed_hi_hat]i+[acoustic_snare]i ";
-			s += "[closed_hi_hat]i ";
+			s += this.closedHiHat + "i+" + this.snare + "i ";
+			s += this.closedHiHat + "i ";
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[closed_hi_hat]i+[bass_drum]i ";
-		s += "[closed_hi_hat]i+[bass_drum]i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
 
-		s += "[closed_hi_hat]i+[acoustic_snare]i ";
-		s += "[closed_hi_hat]i+[bass_drum]i ";
+		s += this.closedHiHat + "i+" + this.snare + "i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
 
-		s += "[closed_hi_hat]i+[bass_drum]i ";
-		s += "[closed_hi_hat]i+[bass_drum]i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
 
 		return s;
 	}
@@ -107,28 +172,28 @@ public class Beat {
 		length --;
 
 		for(int i = 0; i < length; i++) {
-			s += "[closed_hi_hat]i+[bass_drum]i ";
-			s += "[open_hi_hat]i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
+			s += this.openHiHat + "i ";
 
-			s += "[closed_hi_hat]i+[acoustic_snare]i ";
-			s += "[open_hi_hat]i ";
+			s += this.closedHiHat + "i+" + this.snare + "i ";
+			s += this.openHiHat + "i ";
 
-			s += "[closed_hi_hat]i+[bass_drum]i ";
-			s += "[open_hi_hat]i ";
+			s += this.closedHiHat + "i+" + this.bass + "i ";
+			s += this.openHiHat + "i ";
 
-			s += "[closed_hi_hat]i+[acoustic_snare]i ";
-			s += "[open_hi_hat]i ";
+			s += this.closedHiHat + "i+" + this.snare + "i ";
+			s += this.openHiHat + "i ";
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[closed_hi_hat]i+[bass_drum]i ";
-		s += "[open_hi_hat]i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
+		s += this.openHiHat + "i ";
 
-		s += "[closed_hi_hat]i+[acoustic_snare]i ";
-		s += "[open_hi_hat]i ";
+		s += this.closedHiHat + "i+" + this.snare + "i ";
+		s += this.openHiHat + "i ";
 
-		s += "[closed_hi_hat]i+[bass_drum]i ";
-		s += "[open_hi_hat]i ";
+		s += this.closedHiHat + "i+" + this.bass + "i ";
+		s += this.openHiHat + "i ";
 
 		return s;
 	}
@@ -138,32 +203,32 @@ public class Beat {
 		length --;
 
 		for(int i = 0; i < length; i++) {
-			s += "[bass_drum]i ";
-			s += "[acoustic_snare]s ";
-			s += "[acoustic_snare]s ";
+			s += this.bass + "i ";
+			s += this.snare + "s ";
+			s += this.snare + "s ";
 			s += "Rs ";
-			s += "[bass_drum]s ";
-			s += "[acoustic_snare]i ";
+			s += this.bass + "s ";
+			s += this.snare + "i ";
 
-			s += "[bass_drum]i ";
-			s += "[acoustic_snare]s ";
-			s += "[acoustic_snare]s ";
+			s += this.bass + "i ";
+			s += this.snare + "s ";
+			s += this.snare + "s ";
 			s += "Rs ";
-			s += "[bass_drum]s ";
-			s += "[acoustic_snare]i ";
+			s += this.bass + "s ";
+			s += this.snare + "i ";
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[bass_drum]i ";
-		s += "[acoustic_snare]s ";
-		s += "[acoustic_snare]s ";
+		s += this.bass + "i ";
+		s += this.snare + "s ";
+		s += this.snare + "s ";
 		s += "Rs ";
-		s += "[bass_drum]s ";
-		s += "[acoustic_snare]i ";
+		s += this.bass + "s ";
+		s += this.snare + "i ";
 
-		s += "[bass_drum]i ";
-		s += "[acoustic_snare]s ";
-		s += "[acoustic_snare]s ";
+		s += this.bass + "i ";
+		s += this.snare + "s ";
+		s += this.snare + "s ";
 
 		return s;
 	}
@@ -173,16 +238,16 @@ public class Beat {
 		length --;
 
 		for(int i = 0; i < length; i++) {
-			s += "[bass_drum]q ";
-			s += "[bass_drum]q ";
-			s += "[bass_drum]q ";
-			s += "[bass_drum]q ";
+			s += this.bass + "q ";
+			s += this.bass + "q ";
+			s += this.bass + "q ";
+			s += this.bass + "q ";
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[bass_drum]q ";
-		s += "[bass_drum]q ";
-		s += "[bass_drum]q ";
+		s += this.bass + "q ";
+		s += this.bass + "q ";
+		s += this.bass + "q ";
 
 		return s;
 	}
@@ -192,42 +257,42 @@ public class Beat {
 		length --;
 
 		for(int i = 0; i < length; i++) {
-			s += "[closed_hi_hat]s+[bass_drum]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s ";
+			s += this.closedHiHat + "s+" + this.bass + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s ";
 
-			s += "[closed_hi_hat]s+[acoustic_snare]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s+[acoustic_snare]s ";
+			s += this.closedHiHat + "s+" + this.snare + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s+" + this.snare + "s ";
 
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s+[acoustic_snare]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[open_hi_hat]s+[bass_drum]s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s+" + this.snare + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.openHiHat + "s+" + this.bass + "s ";
 
-			s += "[closed_hi_hat]s+[acoustic_snare]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s ";
-			s += "[closed_hi_hat]s ";
+			s += this.closedHiHat + "s+" + this.snare + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s ";
+			s += this.closedHiHat + "s ";
 		}
 
 		// 3/4th measure of beat and 1/4 of fill-in
-		s += "[closed_hi_hat]s+[bass_drum]s ";
-		s += "[closed_hi_hat]s ";
-		s += "[closed_hi_hat]s ";
-		s += "[closed_hi_hat]s ";
+		s += this.closedHiHat + "s+" + this.bass + "s ";
+		s += this.closedHiHat + "s ";
+		s += this.closedHiHat + "s ";
+		s += this.closedHiHat + "s ";
 
-		s += "[closed_hi_hat]s+[acoustic_snare]s ";
-		s += "[closed_hi_hat]s ";
-		s += "[closed_hi_hat]s ";
-		s += "[closed_hi_hat]s+[acoustic_snare]s ";
+		s += this.closedHiHat + "s+" + this.snare + "s ";
+		s += this.closedHiHat + "s ";
+		s += this.closedHiHat + "s ";
+		s += this.closedHiHat + "s+" + this.snare + "s ";
 
-		s += "[closed_hi_hat]s ";
-		s += "[closed_hi_hat]s+[acoustic_snare]s ";
-		s += "[closed_hi_hat]s ";
-		s += "[open_hi_hat]s+[bass_drum]s ";
+		s += this.closedHiHat + "s ";
+		s += this.closedHiHat + "s+" + this.snare + "s ";
+		s += this.closedHiHat + "s ";
+		s += this.openHiHat + "s+" + this.bass + "s ";
 
 		return s;
 	}
@@ -235,10 +300,10 @@ public class Beat {
 	private String fill00() {
 		String s = "";
 
-		s += "[hi_tom]t*3:2 [hi_tom]t*3:2 [hi_tom]t*3:2 ";
-		s += "[hi_mid_tom]t*3:2 [hi_mid_tom]t*3:2 [hi_mid_tom]t*3:2 ";
-		s += "[lo_mid_tom]t*3:2 [lo_mid_tom]t*3:2 [lo_mid_tom]t*3:2 ";
-		s += "[lo_tom]t*3:2 [lo_tom]t*3:2 [lo_tom]t*3:2 ";
+		s += this.hiTom + "t* " + this.hiTom + "t* " + this.hiTom + "t* ";
+		s += this.hiMidTom + "t* " + this.hiMidTom + "t* " + this.hiMidTom + "t* ";
+		s += this.loMidTom + "t* " + this.loMidTom + "t* " + this.loMidTom + "t* ";
+		s += this.loTom + "t* " + this.loTom + "t* " + this.loTom + "t* ";
 
 		return s;
 	}
@@ -246,16 +311,16 @@ public class Beat {
 	private String fill01() {
 		String s = "";
 
-		s += "[acoustic_snare]s ";
-		s += "[acoustic_snare]s ";
-		s += "[acoustic_snare]s ";
-		s += "[acoustic_snare]s ";
+		s += this.snare + "s ";
+		s += this.snare + "s ";
+		s += this.snare + "s ";
+		s += this.snare + "s ";
 
 		return s;
 	}
 
 	private String fill02() {
-		return "[hi_tom]i*3:2 [hi_mid_tom]i*3:2 [lo_mid_tom]i*3:2 ";
+		return this.hiTom + "i* " + this.hiMidTom + "i* " + this.loTom + "i* ";
 	}
 
 	private String fill03() {
@@ -266,16 +331,20 @@ public class Beat {
 		s += "[lo_mid_tom]s ";
 		s += "[lo_tom]s+[crash_cymbal_2]s ";
 
+		s += this.hiTom + "s+" + this.cymbal + "s ";
+		s += this.hiMidTom + "s ";
+		s += this.loMidTom + "s ";
+		s += this.loTom + "s+" + this.cymbal + "s ";
 		return s;
 	}
 
 	private String fill04() {
 		String s = "";
 
-		s += "[hi_tom]s ";
-		s += "[hi_tom]s ";
-		s += "[hi_mid_tom]s ";
-		s += "[hi_mid_tom]s ";
+		s += this.hiTom + "s ";
+		s += this.hiTom + "s ";
+		s += this.hiMidTom + "s ";
+		s += this.hiMidTom + "s ";
 
 		return s;
 	}
